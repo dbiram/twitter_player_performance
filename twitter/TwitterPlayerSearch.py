@@ -15,7 +15,7 @@ class TwitterPlayerSearch:
 
     @staticmethod
     def search(player_name, player_account, team_account, max_tweets=100):
-        query = '{} lang:en to:{} OR {} lang:en to:{}'.format(player_name, team_account, player_name, player_account)
+        query = f"""{player_name} lang:en -is:retweet OR {player_name} lang:de -is:retweet"""
         try:
 
             tweets = TwitterPlayerSearch.client.search_recent_tweets(query=query,
