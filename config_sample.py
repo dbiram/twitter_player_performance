@@ -4,3 +4,4 @@ class Config:
     BEARER_TOKEN = "*"
     ACCESS_TOKEN = "*"
     ACCESS_TOKEN_SECRET = "*"
+    X_RapidAPI_Key = "*"
