@@ -7,8 +7,8 @@ from config import Config
 class BundesligaAPI:
     bundesliga_id = 78
     @staticmethod
-    def get_list_matchs(date):
-        url = "https://api-football-v1.p.rapidapi.com/v3/fixtures/players"
+    def get_list_matches(date):
+        url = "https://api-football-v1.p.rapidapi.com/v3/fixtures"
 
         querystring = {"date" : datetime.strftime(date, "%Y-%m-%d"),
                        "league" : str(BundesligaAPI.bundesliga_id),
@@ -21,6 +21,8 @@ class BundesligaAPI:
 
         response = requests.request("GET", url, headers=headers, params=querystring)
         return response
+
+
 
     @staticmethod
     def jprint(response):
