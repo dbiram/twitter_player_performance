@@ -22,6 +22,20 @@ class BundesligaAPI:
         response = requests.request("GET", url, headers=headers, params=querystring)
         return response
 
+    @staticmethod
+    def player_stats_from_fixture_id(fixture_id):
+        url = "https://api-football-v1.p.rapidapi.com/v3/fixtures/players"
+
+        querystring = {"fixture": str(fixture_id)}
+
+        headers = {
+            "X-RapidAPI-Key": Config.X_RapidAPI_Key,
+            "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com"
+        }
+
+        response = requests.request("GET", url, headers=headers, params=querystring)
+
+        return response
 
 
     @staticmethod
