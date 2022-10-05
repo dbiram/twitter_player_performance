@@ -1,26 +1,26 @@
 ﻿player_id;player_name;player_twitter_account;team_id;position
-1;Bellingham;BellinghamJude;1;M
-2;Brandt;JulianBrandt;1;M
-3;Hazard;HazardThorgan8;1;M
-4;Reus;woodyinho;1;M
-5;Adeymi;karim_adeyemi;1;A
-6;Silva;andrevsilva19;2;A
-7;Forsberg;eforsberg10;2;M
-8;Werner;TimoWerner;2;A
-9;Nkunku;c_nk97;2;A
-10;Haidara;doudouhaidara04;2;M
-11;Thuram;MarcusThuram;3;A
-12;Stindl;stindl28;3;A
-13;Weigel;JuWeigl;3;M
-14;Scally;jjscally_10;3;D
-15;Plea;alassane_plea;3;A
-16;Hincapie;pierohincapie;4;D
-17;Diaby;MoussaDiaby_19;4;A
-18;Frimpong;JeremieFrimpong;4;D
-19;Bellarabi;KimoBellarabi;4;A
-20;Hudson-Odoi;Calteck10;4;A
-21;Mané;Smane_Officiel;5;A
-22;Hernandez;LucasHernandez;5;D
-23;Sané;leroy_sane;5;A
-24;Muller;esmuellert_;5;A
-25;Gnabry;SergeGnabry;5;A
+1;Jude Bellingham;BellinghamJude;1;M
+2;Julian Brandt;JulianBrandt;1;M
+3;Thorgan Hazard;HazardThorgan8;1;M
+4;Marco Reus;woodyinho;1;M
+5;Karim Adeymi;karim_adeyemi;1;A
+6;Andre Silva;andrevsilva19;2;A
+7;Emile Forsberg;eforsberg10;2;M
+8;Timo Werner;TimoWerner;2;A
+9;Christopher Nkunku;c_nk97;2;A
+10;Amadou Haidara;doudouhaidara04;2;M
+11;Marcus Thuram;MarcusThuram;3;A
+12;Lars Stindl;stindl28;3;A
+13;Julian Weigel;JuWeigl;3;M
+14;Joe Scally;jjscally_10;3;D
+15;Alassane Plea;alassane_plea;3;A
+16;Piero Hincapie;pierohincapie;4;D
+17;Moussa Diaby;MoussaDiaby_19;4;A
+18;Jeremie Frimpong;JeremieFrimpong;4;D
+19;Karim Bellarabi;KimoBellarabi;4;A
+20;Callum Hudson Odoi;Calteck10;4;A
+21;Sadio Mané;Smane_Officiel;5;A
+22;Lucas Hernandez;LucasHernandez;5;D
+23;Leroy Sané;leroy_sane;5;A
+24;Thomas Muller;esmuellert_;5;A
+25;Serge Gnabry;SergeGnabry;5;A
