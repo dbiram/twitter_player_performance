@@ -1,6 +1,9 @@
 from bundesliga_api.BundesligaAPI import BundesligaAPI
+from twitter.TwitterPlayerSearch import TwitterPlayerSearch
 from data import AppData
-from utils import Fixture, PlayerStat
+from utils import Fixture, PlayerStat, PlayerTweet
+
+from datetime import datetime
 
 
 class AppFunctions:
@@ -41,4 +44,15 @@ class AppFunctions:
                         relevant.append(PlayerStat(id_local, player_name, float(rating), fixture.date))
                     else:
                         relevant.append(PlayerStat(id_local, player_name, 0, fixture.date))
+        return relevant
+
+    def get_relevant_tweets(self, date, max_tweets = 100):
+        relevant = []
+        for player, player_id in zip(self.data.players.player_name, self.data.players.player_id):
+            tweets_json = TwitterPlayerSearch.search_particular_date(player, date, max_tweets).json()
+            if tweets_json["meta"]["result_count"] > 0:
+                tweets = tweets_json["data"]
+                for tweet in tweets:
+                    creation_date = datetime.strptime(tweet["created_at"][:19], "%Y-%m-%dT%H:%M:%S")
+                    relevant.append(PlayerTweet(player_id, player, tweet["text"], creation_date, date))
         return relevant
