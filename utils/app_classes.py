@@ -14,3 +14,11 @@ class PlayerStat:
     player_name: str
     rating: float
     date: datetime.datetime
+
+@dataclass
+class PlayerTweet:
+    player_id: int
+    player_name: str
+    tweet_body: str
+    created_at: datetime.datetime
+    date: datetime.datetime
