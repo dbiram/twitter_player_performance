@@ -7,7 +7,7 @@ class AppFunctions:
     path = str
     data = AppData
 
-    def __init__(self, path="../data/samples/"):
+    def __init__(self, path="../data/"):
         self.path = path
         self.data = AppData(path)
 
