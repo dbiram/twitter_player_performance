@@ -4,6 +4,7 @@ from data import AppData
 from utils import Fixture, PlayerStat, PlayerTweet
 
 from datetime import datetime
+import csv
 
 
 class AppFunctions:
@@ -56,3 +57,28 @@ class AppFunctions:
                     creation_date = datetime.strptime(tweet["created_at"][:19], "%Y-%m-%dT%H:%M:%S")
                     relevant.append(PlayerTweet(player_id, player, tweet["text"], creation_date, date))
         return relevant
+
+    def append_master_data(self, date):
+        print(date)
+        matches = self.get_relevant_matches(date)
+        if len(matches)>0:
+            for fixture in matches:
+                print(fixture)
+                with open(self.path+'master_data/all_fixtures.csv', 'a+', newline='', encoding="utf-8") as write_obj:
+                    csv_writer = csv.writer(write_obj, delimiter=';')
+                    csv_writer.writerow([int(datetime.now().timestamp() * 1000), fixture.fixture_id, fixture.home_team_id, fixture.away_team_id, fixture.date])
+                players = self.get_relevant_player_stats(fixture)
+                if len(players)>0:
+                    for player in players:
+                        print(player)
+                        with open(self.path + 'master_data/all_player_rates.csv', 'a+', newline='', encoding="utf-8") as write_obj:
+                            csv_writer = csv.writer(write_obj, delimiter=';')
+                            csv_writer.writerow([int(datetime.now().timestamp() * 1000), player.player_id, player.player_name, player.rating, player.date])
+        tweets = self.get_relevant_tweets(date)
+        if len(tweets)>0:
+            for tweet in tweets:
+                with open(self.path + 'master_data/all_tweets.csv', 'a+', newline='', encoding="utf-8") as write_obj:
+                    csv_writer = csv.writer(write_obj, delimiter=';')
+                    csv_writer.writerow([int(datetime.now().timestamp() * 1000), tweet.player_id, tweet.player_name, tweet.tweet_body, tweet.date])
+
+
