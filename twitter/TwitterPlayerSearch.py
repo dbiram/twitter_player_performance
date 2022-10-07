@@ -23,7 +23,7 @@ class TwitterPlayerSearch:
                                                       tweet_fields=['author_id', 'created_at'],
                                                       max_results=max_tweets,
                                                       start_time=start_date)
-            print("-- Successfully connected to Twitter API --")
+            #print("-- Successfully connected to Twitter API --")
             return tweets
         except Exception as e:
             print("-- Couldn't connect to Twitter API --")
@@ -34,7 +34,7 @@ class TwitterPlayerSearch:
         now = datetime.datetime.now()
         start_date = now - datetime.timedelta(days=1)
         s = datetime.datetime.strftime(start_date, "%Y-%m-%d %H:%M:%S")
-        print(f"-- Fetching Tweets From {s} --")
+        #print(f"-- Fetching Tweets From {s} --")
         return TwitterPlayerSearch.search(player_name, start_date=start_date, max_tweets=max_tweets)
 
     @staticmethod
@@ -48,7 +48,7 @@ class TwitterPlayerSearch:
                                                                      max_results=max_tweets,
                                                                      start_time=query_date,
                                                                      end_time=query_date+datetime.timedelta(days=1))
-            print("-- Successfully connected to Twitter API --")
+            #print("-- Successfully connected to Twitter API --")
             return tweets
         except Exception as e:
             print("-- Couldn't connect to Twitter API --")

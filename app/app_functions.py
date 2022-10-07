@@ -59,18 +59,18 @@ class AppFunctions:
         return relevant
 
     def append_master_data(self, date):
-        print(date)
+
         matches = self.get_relevant_matches(date)
         if len(matches)>0:
             for fixture in matches:
-                print(fixture)
+
                 with open(self.path+'master_data/all_fixtures.csv', 'a+', newline='', encoding="utf-8") as write_obj:
                     csv_writer = csv.writer(write_obj, delimiter=';')
                     csv_writer.writerow([int(datetime.now().timestamp() * 1000), fixture.fixture_id, fixture.home_team_id, fixture.away_team_id, fixture.date])
                 players = self.get_relevant_player_stats(fixture)
                 if len(players)>0:
                     for player in players:
-                        print(player)
+
                         with open(self.path + 'master_data/all_player_rates.csv', 'a+', newline='', encoding="utf-8") as write_obj:
                             csv_writer = csv.writer(write_obj, delimiter=';')
                             csv_writer.writerow([int(datetime.now().timestamp() * 1000), player.player_id, player.player_name, player.rating, player.date])
