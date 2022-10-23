@@ -79,6 +79,6 @@ class AppFunctions:
             for tweet in tweets:
                 with open(self.path + 'master_data/all_tweets.csv', 'a+', newline='', encoding="utf-8") as write_obj:
                     csv_writer = csv.writer(write_obj, delimiter=';')
-                    csv_writer.writerow([int(datetime.now().timestamp() * 1000), tweet.player_id, tweet.player_name, tweet.tweet_body, tweet.date])
+                    csv_writer.writerow([int(datetime.now().timestamp() * 1000), tweet.player_id, tweet.player_name, tweet.tweet_body, tweet.created_at,tweet.date])
 
 
