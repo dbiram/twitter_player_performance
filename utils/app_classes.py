@@ -22,3 +22,10 @@ class PlayerTweet:
     tweet_body: str
     created_at: datetime.datetime
     date: datetime.datetime
+
+@dataclass
+class PlayerTweetAnalysis:
+    tweet_id: int
+    player_id: int
+    day: str
+    analysis: int
