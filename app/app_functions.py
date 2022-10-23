@@ -1,9 +1,11 @@
 from bundesliga_api.BundesligaAPI import BundesligaAPI
 from twitter.TwitterPlayerSearch import TwitterPlayerSearch
+from twitter.SentimentAnalysis import SentimentAnalysis
 from data import AppData
 from utils import Fixture, PlayerStat, PlayerTweet
 
 from datetime import datetime
+import pandas as pd
 import csv
 
 
@@ -75,10 +77,20 @@ class AppFunctions:
                             csv_writer = csv.writer(write_obj, delimiter=';')
                             csv_writer.writerow([int(datetime.now().timestamp() * 1000), player.player_id, player.player_name, player.rating, player.date])
         tweets = self.get_relevant_tweets(date)
-        if len(tweets)>0:
+        tweets_df = {"id$": [], "player_id": [], "player_name": [], "tweet_body": [], "created_at": [], "date": []}
+        if len(tweets) > 0:
             for tweet in tweets:
+                tweet_id = int(datetime.now().timestamp() * 1000)
+                tweets_df["id$"].append(tweet_id)
+                tweets_df["player_id"].append(tweet.player_id)
+                tweets_df["player_name"].append(tweet.player_name)
+                tweets_df["tweet_body"].append(tweet.tweet_body)
+                tweets_df["created_at"].append(str(tweet.created_at))
+                tweets_df["date"].append(str(tweet.date))
                 with open(self.path + 'master_data/all_tweets.csv', 'a+', newline='', encoding="utf-8") as write_obj:
                     csv_writer = csv.writer(write_obj, delimiter=';')
-                    csv_writer.writerow([int(datetime.now().timestamp() * 1000), tweet.player_id, tweet.player_name, tweet.tweet_body, tweet.created_at,tweet.date])
-
-
+                    csv_writer.writerow([tweet_id, tweet.player_id, tweet.player_name, tweet.tweet_body, tweet.created_at,tweet.date])
+        tweets_pd_df = pd.DataFrame(tweets_df)
+        if tweets_pd_df.shape[0] > 0:
+            analysis = SentimentAnalysis(tweets_pd_df)
+            analysis.tweets_analysed.to_csv(self.path+'analysed_data/all_analysed_tweets.csv', mode='a', header=False, index=False, sep=';')
