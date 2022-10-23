@@ -18,12 +18,15 @@ class SentimentAnalysis:
         try:
             return detect(row["tweet_body"])
         except Exception as e:
-            return 'en'
+            return 'NaN'
 
     def get_analysis_score(self, row):
         """ Function used in df.apply """
-        score = SentimentIntensityAnalyzer().polarity_scores(row['tweet_body'])
-        return score['neg'], score['neu'], score['pos']
+        try:
+            score = SentimentIntensityAnalyzer().polarity_scores(row['tweet_body'])
+            return score['neg'], score['neu'], score['pos']
+        except Exception as e:
+            return 0, 0, 0
 
     def get_analysis_cat(self, row):
         """ Function used in df.apply """
