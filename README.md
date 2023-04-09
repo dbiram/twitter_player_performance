@@ -10,4 +10,4 @@ On the other hand, we collect the players rating after every game they play.
 At the end we visualise the data on a Tableau dashboard
 
 ## Dashboard Exemple
-![alt text](./imgs/jude.png?raw=true "Jude Bellingham Example")
+![](imgs/jude.png "Jude Bellingham Example")
