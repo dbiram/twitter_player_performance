@@ -8,3 +8,6 @@ Having a list of football Teams and players, the project aims to study the corre
 On one hand, we daily retrieve tweets data and analyse their sentiment i.e we give a score for every tweet about a player depending on if the tweet is negative or positive.
 On the other hand, we collect the players rating after every game they play.
 At the end we visualise the data on a Tableau dashboard
+
+## Dashboard Exemple
+![alt text](relative%20path/imgs/jude.png?raw=true "Jude Bellingham Example")
