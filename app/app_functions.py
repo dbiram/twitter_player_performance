@@ -11,6 +11,8 @@ import hdfs
 from dataclasses import asdict
 import fastavro
 
+fastavro.read.LOGICAL_READERS["int-time-millis"] = lambda a,b,c:a
+
 import logging
 
 logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
@@ -155,43 +157,46 @@ class AppFunctions:
         if self.hdfs_client and (len(matches) > 0):
             self.add_list_to_avro("fixture", matches, batch_id)
         if len(matches) > 0:
+            players = []
             for fixture in matches:
-
-                with open(self.path + 'master_data/all_fixtures.csv', 'a+', newline='', encoding="utf-8") as write_obj:
-                    csv_writer = csv.writer(write_obj, delimiter=';')
-                    csv_writer.writerow(
-                        [int(datetime.now().timestamp() * 1000), fixture.fixture_id, fixture.home_team_id,
-                         fixture.away_team_id, fixture.date])
-                players = self.get_relevant_player_stats(fixture)
-                if self.hdfs_client and (len(players) > 0):
-                    self.add_list_to_avro("player", players, batch_id)
-                if len(players) > 0:
-                    for player in players:
-                        with open(self.path + 'master_data/all_player_rates.csv', 'a+', newline='',
-                                  encoding="utf-8") as write_obj:
-                            csv_writer = csv.writer(write_obj, delimiter=';')
-                            csv_writer.writerow(
-                                [int(datetime.now().timestamp() * 1000), player.player_id, player.player_name,
-                                 player.rating, player.date])
+                players.extend(self.get_relevant_player_stats(fixture))
+            if self.hdfs_client and (len(players) > 0):
+                self.add_list_to_avro("player", players, batch_id)
         tweets = self.get_relevant_tweets(date)
         if self.hdfs_client and (len(tweets) > 0):
             self.add_list_to_avro("tweet", tweets, batch_id)
-        tweets_df = {"id$": [], "player_id": [], "player_name": [], "tweet_body": [], "created_at": [], "date": []}
-        if len(tweets) > 0:
-            for tweet in tweets:
-                tweet_id = int(datetime.now().timestamp() * 1000)
-                tweets_df["id$"].append(tweet_id)
-                tweets_df["player_id"].append(tweet.player_id)
-                tweets_df["player_name"].append(tweet.player_name)
-                tweets_df["tweet_body"].append(tweet.tweet_body)
-                tweets_df["created_at"].append(str(tweet.created_at))
-                tweets_df["date"].append(str(tweet.date))
-                with open(self.path + 'master_data/all_tweets.csv', 'a+', newline='', encoding="utf-8") as write_obj:
-                    csv_writer = csv.writer(write_obj, delimiter=';')
-                    csv_writer.writerow(
-                        [tweet_id, tweet.player_id, tweet.player_name, tweet.tweet_body, tweet.created_at, tweet.date])
-        tweets_pd_df = pd.DataFrame(tweets_df)
-        if tweets_pd_df.shape[0] > 0:
-            analysis = SentimentAnalysis(tweets_pd_df)
-            analysis.tweets_analysed.to_csv(self.path + 'analysed_data/all_analysed_tweets.csv', mode='a', header=False,
-                                            index=False, sep=';')
+
+    def read_avro_from_hdfs(self, path):
+        records = []
+        with self.hdfs_client.read(path) as avro_file:
+            avro_reader = fastavro.reader(avro_file)
+            for record in avro_reader:
+                records.append(record)
+        return pd.DataFrame(records)
+
+    def append_analysed_data(self):
+        rootLogger.info("Reading Avro files from HDFS ....")
+        def convert_date(int_date):
+            return datetime.fromtimestamp(int_date).strftime("%Y-%m-%d")
+
+        types = ['fixture', 'player', 'tweet']
+        for t in types:
+            p = "/data/master_data/"+t
+            p_processed = "/data/processed/"+t
+            to_be_processed = self.hdfs_client.list(p)
+            rootLogger.info("Files to be processed = "+str(to_be_processed))
+            if len(to_be_processed) > 0:
+                for f in to_be_processed:
+                    df = self.read_avro_from_hdfs(p+"/"+f)
+                    df.date = pd.to_datetime(df['date'], unit='s')
+                    if t == 'tweet':
+                        df["created_at"] = df['created_at'].apply(convert_date)
+                        if df.shape[0] > 0:
+                            analysis = SentimentAnalysis(df)
+                            df = analysis.tweets_analysed
+                    if df.shape[0] > 0:
+                        rootLogger.info("Writing analysed data in csv ....")
+                        df.to_csv('data/analysed_data/all_'+t+'.csv', mode='a', header=False, index=False,
+                                sep=';')
+                    rootLogger.info("Moving file = "+f+" to processed ....")
+                    self.hdfs_client.rename(p+"/"+f, p_processed+"/"+f)

@@ -15,4 +15,5 @@ if __name__ == "__main__":
             args_dict["minutes"] = int(arg)
     app = AppFunctions(hdfs_path="http://localhost:50070", path="data/")
     app.append_master_data(datetime.now()-timedelta(days=args_dict["days"], hours=args_dict["hours"], minutes=args_dict["minutes"]))
+    app.append_analysed_data()
 
