@@ -11,6 +11,8 @@ import hdfs
 from dataclasses import asdict
 import fastavro
 
+from postgres import DB_postgres
+
 fastavro.read.LOGICAL_READERS["int-time-millis"] = lambda a,b,c:a
 
 import logging
@@ -195,8 +197,9 @@ class AppFunctions:
                             analysis = SentimentAnalysis(df)
                             df = analysis.tweets_analysed
                     if df.shape[0] > 0:
-                        rootLogger.info("Writing analysed data in csv ....")
-                        df.to_csv('data/analysed_data/all_'+t+'.csv', mode='a', header=False, index=False,
-                                sep=';')
+                        rootLogger.info("Writing analysed data in Postgres ....")
+                        #df.to_csv('data/analysed_data/all_'+t+'.csv', mode='a', header=False, index=False,sep=';')
+                        DB_postgres.postgres_append_table(df,f"all_{t}s")
+                        rootLogger.info(f"Analysed data for {t}s are appended in Postgres table all_{t}s")
                     rootLogger.info("Moving file = "+f+" to processed ....")
                     self.hdfs_client.rename(p+"/"+f, p_processed+"/"+f)
