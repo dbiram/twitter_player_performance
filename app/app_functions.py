@@ -12,6 +12,7 @@ from dataclasses import asdict
 import fastavro
 
 from postgres import DB_postgres
+from mongodb import DB_mongodb
 
 fastavro.read.LOGICAL_READERS["int-time-millis"] = lambda a,b,c:a
 
@@ -35,6 +36,7 @@ class AppFunctions:
     path = str
     data = AppData
     hdfs_client = hdfs.Client
+    mongoDB_mapping = {'tweet': 'tweets', 'player': 'ratings'}
 
     def __init__(self, hdfs_path=None, path="../data/"):
         rootLogger.info("Starting a new App with destination path = "+str(path))
@@ -201,5 +203,11 @@ class AppFunctions:
                         #df.to_csv('data/analysed_data/all_'+t+'.csv', mode='a', header=False, index=False,sep=';')
                         DB_postgres.postgres_append_table(df,f"all_{t}s")
                         rootLogger.info(f"Analysed data for {t}s are appended in Postgres table all_{t}s")
+
+                        if t in ['tweet', 'player']:
+                            rootLogger.info("Writing analysed data in MongoDB ....")
+                            DB_mongodb.mongodb_append_field(df, self.mongoDB_mapping[t])
+                            rootLogger.info(f"Analysed data for {t}s are appended in MongoDB collection field {self.mongoDB_mapping[t]}")
+
                     rootLogger.info("Moving file = "+f+" to processed ....")
                     self.hdfs_client.rename(p+"/"+f, p_processed+"/"+f)
