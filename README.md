@@ -34,7 +34,15 @@ Once the data has been analyzed, it is loaded into the data warehouse in a relat
 ## Data Analysis
 Tableau is used to connect to the Postgres database and visualize the data. The goal is to analyze the correlation between players' ratings and public sentiment on Twitter. By visualizing the data, we can identify patterns and trends that may provide insights into how public sentiment affects player performance.
 
+![](imgs/dashboard_example1.png "Dashboard Example")
+
+## Conclusion
+Although the data we managed to collect is limited, we still tried to draw some conclusions (that of course may not be 100% true) from our dashboard that you can see in the following:
+#### Jude Bellingham:
 ![](imgs/jude.png "Jude Bellingham Example")
+We can see that in the case of Jude Bellingham there is no correlation between the sentiments of the tweets about him and his performance. We can say that this player has a strong character and is not influenced by social media.
+#### Thomas Muller:
+![](imgs/muller..png "Jude Bellingham Example")
 
 ## Credits
 This project was developed by Dbira Moez
